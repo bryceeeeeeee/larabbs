@@ -15,18 +15,25 @@ class VerificationCodesController extends Controller
     public function store(VerificationCodeRequest $request, EasySms $easySms)
     {
         $phone = $request->phone;
-        $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);
 
-        try {
-            $res = $easySms->send($phone, [
-                'template' => config('easysms.gateways.aliyun.templates.register'),
-                'data' => [
-                    'code' => $code
-                ]
-            ]);
-        } catch (NoGatewayAvailableException $e) {
-            $msg = $e->getException('aliyun')->getMessage();
-            abort(500, $msg ?: '短信发送异常');
+        dd(app()->environment('production'));
+        if (! app()->environment('production')) {
+            $code = '1234';
+        } else {
+
+            $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);
+
+            try {
+                $res = $easySms->send($phone, [
+                    'template' => config('easysms.gateways.aliyun.templates.register'),
+                    'data' => [
+                        'code' => $code
+                    ]
+                ]);
+            } catch (NoGatewayAvailableException $e) {
+                $msg = $e->getException('aliyun')->getMessage();
+                abort(500, $msg ?: '短信发送异常');
+            }
         }
 
         $key = Str::random(15);
