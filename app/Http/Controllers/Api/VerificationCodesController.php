@@ -16,7 +16,6 @@ class VerificationCodesController extends Controller
     {
         $phone = $request->phone;
 
-        dd(app()->environment('production'));
         if (! app()->environment('production')) {
             $code = '1234';
         } else {
