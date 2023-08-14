@@ -36,7 +36,7 @@ class VerificationCodesController extends Controller
         }
 
         $key = Str::random(15);
-        $cacheKey = 'verificationCode_' . $key;
+        $cacheKey = 'verification_code_' . $key;
         $expireAt = now()->addMinutes(5);
         Cache::put($cacheKey, ['phone' => $phone, 'code' => $code], $expireAt);
 
