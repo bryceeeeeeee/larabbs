@@ -34,6 +34,15 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         ->where('social_type', 'wechat|weibo')
         ->name('social.authorizations.store');
 
+    // 登录
+    Route::post('authorizations', [AuthorizationsController::class, 'store'])
+        ->name('authorizations.store');
+    // 刷新token
+    Route::put('authorizations/current', [AuthorizationsController::class, 'update'])->name('authorizations.update');
+    // 删除token
+    Route::delete('authorizations/current', [AuthorizationsController::class, 'delete'])->name('authorizations.destory');
+
+
     Route::middleware('throttle:' . config('api.rate_limits.access'))
         ->group(function () {
             // 图片验证码
