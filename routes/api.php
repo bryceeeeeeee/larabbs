@@ -22,9 +22,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
     // 短信验证码
-    Route::post('verification/codes', [VerificationCodesController::class, 'store'])->name('verification_codes.store');
+    Route::post('verification/codes', [VerificationCodesController::class, 'store'])
+        ->name('verification_codes.store')
+        ->middleware('throttle:' . config('api.rate_limits.sign'));
     // 用户注册
     Route::post('users', [UsersController::class, 'store'])->name('users.store');
+
+    Route::middleware('throttle:' . config('api.rate_limits.access'))
+        ->group(function () {
+
+        });
 
     Route::get('version', function () {
         abort(403, 'test');
