@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\VerificationCodesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthorizationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         ->middleware('throttle:' . config('api.rate_limits.sign'));
     // 用户注册
     Route::post('users', [UsersController::class, 'store'])->name('users.store');
+    // 第三方登录-微信
+    Route::post('socials/{social_type}/authorizations', [AuthorizationsController::class, 'socialStore'])
+        ->where('social_type', 'wechat|weibo')
+        ->name('social.authorizations.store');
 
     Route::middleware('throttle:' . config('api.rate_limits.access'))
         ->group(function () {

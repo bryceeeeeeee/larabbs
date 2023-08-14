@@ -43,7 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'introduction',
         'avatar',
-        'phone'
+        'phone',
+        'avatar',
+        'weixin_openid',
+        'weixin_unionid'
     ];
 
     protected $hidden = [
