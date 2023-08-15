@@ -52,7 +52,7 @@ class UsersController extends Controller
     {
         $user = $request->user();
 
-        $attributes = $request->only(['name', 'email', 'introduction']);
+        $attributes = $request->only(['name', 'email', 'introduction', 'registration_id']);
 
         if ($request->avatar_image_id) {
             $image = Image::find($request->avatar_image_id);
@@ -63,5 +63,12 @@ class UsersController extends Controller
         $user->update($attributes);
 
         return (new UserResource($user))->showSensitiveFields();
+    }
+
+    public function activeIndex(User $user)
+    {
+        UserResource::wrap('data');
+
+        return UserResource::collection($user->getActiveUsers());
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthorizationsController;
 use App\Http\Controllers\Api\CategorysController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\linksController;
 use App\Http\Controllers\Api\TopicsController;
 use App\Http\Controllers\Api\RepliesController;
 use App\Http\Controllers\Api\NotificationsController;
@@ -28,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->name('api.v1.')->group(function () {
+Route::prefix('v1')->middleware('change-locale')->name('api.v1.')->group(function () {
     // 短信验证码
     Route::post('verification/codes', [VerificationCodesController::class, 'store'])
         ->name('verification_codes.store')
@@ -71,6 +72,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             // 某个用户回复列表
             Route::get('users/{user}/replies', [RepliesController::class, 'UserIndex'])
                 ->name('users.replies.index');
+            // 资源推荐
+            Route::apiResource('links', linksController::class)
+                ->only('index');
+            // 活跃用户
+            Route::get('actived/users', [UsersController::class, 'activeIndex'])
+                ->name('actived.users.index');
 
 
             // 登录后可以访问的接口
