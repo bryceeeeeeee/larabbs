@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\VerificationCodesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthorizationsController;
+use App\Http\Controllers\Api\CategorysController;
 use App\Http\Controllers\Api\ImageController;
 
 /*
@@ -52,6 +53,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             // 某个用户信息
             Route::get('users/{user}', [UsersController::class, 'show'])
                 ->name('users.show');
+            // 分类列表
+            Route::apiResource('categories', CategorysController::class)
+                ->only('index');
 
             // 登录后可以访问的接口
             Route::middleware('auth:api')->group(function () {
