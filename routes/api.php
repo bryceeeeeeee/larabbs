@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthorizationsController;
 use App\Http\Controllers\Api\CategorysController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\TopicsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             // 分类列表
             Route::apiResource('categories', CategorysController::class)
                 ->only('index');
+            // 话题列表、详情
+            Route::apiResource('topics', TopicsController::class)->only(['index', 'show']);
+            Route::get('users/{user}/topics', [TopicsController::class, 'userIndex'])->name('users.topcis.index');
 
             // 登录后可以访问的接口
             Route::middleware('auth:api')->group(function () {
@@ -65,6 +69,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
                 Route::patch('user', [UsersController::class, 'update'])->name('user.update');
                 // 上传图片
                 Route::post('images', [ImageController::class, 'store'])->name('images.store');
+                // 话题发布、修改、删除话题
+                Route::apiResource('topics', TopicsController::class)->only(['store', 'update', 'destroy']);
 
             });
         });
