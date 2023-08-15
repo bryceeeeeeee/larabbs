@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\AuthorizationsController;
 use App\Http\Controllers\Api\CategorysController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\TopicsController;
+use App\Http\Controllers\Api\RepliesController;
+use App\Http\Controllers\Api\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,20 +60,44 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::apiResource('categories', CategorysController::class)
                 ->only('index');
             // 话题列表、详情
-            Route::apiResource('topics', TopicsController::class)->only(['index', 'show']);
-            Route::get('users/{user}/topics', [TopicsController::class, 'userIndex'])->name('users.topcis.index');
+            Route::apiResource('topics', TopicsController::class)
+                ->only(['index', 'show']);
+            // 某个用户的话题
+            Route::get('users/{user}/topics', [TopicsController::class, 'userIndex'])
+                ->name('users.topcis.index');
+            // 话题回复列表
+            Route::apiResource('topics.replies', RepliesController::class)->only(['index']);
+            // 某个用户回复列表
+            Route::get('users/{user}/replies', [RepliesController::class, 'UserIndex'])
+                ->name('users.replies.index');
+
 
             // 登录后可以访问的接口
             Route::middleware('auth:api')->group(function () {
                 // 当前登录的用户信息
-                Route::get('user', [UsersController::class, 'me'])->name('user.show');
+                Route::get('user', [UsersController::class, 'me'])
+                    ->name('user.show');
                 // 编辑登录用户信息
-                Route::patch('user', [UsersController::class, 'update'])->name('user.update');
+                Route::patch('user', [UsersController::class, 'update'])
+                    ->name('user.update');
                 // 上传图片
-                Route::post('images', [ImageController::class, 'store'])->name('images.store');
+                Route::post('images', [ImageController::class, 'store'])
+                    ->name('images.store');
                 // 话题发布、修改、删除话题
-                Route::apiResource('topics', TopicsController::class)->only(['store', 'update', 'destroy']);
-
+                Route::apiResource('topics', TopicsController::class)
+                    ->only(['store', 'update', 'destroy']);
+                // 发布、删除回复
+                Route::apiResource('topics.replies', RepliesController::class)
+                    ->only(['store', 'destroy']);
+                // 通知列表
+                Route::apiResource('notifications', NotificationsController::class)
+                    ->only(['index']);
+                // 通知统计
+                Route::get('notifications/stats', [NotificationsController::class, 'stats'])
+                    ->name('notifications.stats');
+                // 标记消息通知为已读
+                Route::patch('user/read/notifications', [NotificationsController::class, 'read'])
+                    ->name('user.notifications.read');
             });
         });
 
