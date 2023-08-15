@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\VerificationCodesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthorizationsController;
+use App\Http\Controllers\Api\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::middleware('auth:api')->group(function () {
                 // 当前登录的用户信息
                 Route::get('user', [UsersController::class, 'me'])->name('user.show');
+                // 编辑登录用户信息
+                Route::patch('user', [UsersController::class, 'update'])->name('user.update');
+                // 上传图片
+                Route::post('images', [ImageController::class, 'store'])->name('images.store');
+
             });
         });
 
