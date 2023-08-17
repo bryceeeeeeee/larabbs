@@ -44,6 +44,9 @@ Route::prefix('v1')->middleware('change-locale')->name('api.v1.')->group(functio
     // 登录
     Route::post('authorizations', [AuthorizationsController::class, 'store'])
         ->name('authorizations.store');
+    // 小程序登录
+    Route::post('weapp/authorizations', [AuthorizationsController::class, 'weappStore'])
+        ->name('weapp.authorizations.store');
     // 刷新token
     Route::put('authorizations/current', [AuthorizationsController::class, 'update'])->name('authorizations.update');
     // 删除token

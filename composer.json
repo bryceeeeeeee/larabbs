@@ -28,7 +28,8 @@
         "spatie/laravel-query-builder": "^5.2",
         "summerblue/administrator": "9.*",
         "summerblue/laravel-active": "9.*",
-        "viacreative/sudo-su": "~1.1"
+        "viacreative/sudo-su": "~1.1",
+        "w7corp/easywechat": "^6.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "~3.6",
